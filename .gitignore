@@ -1,0 +1,30 @@
+# macOS
+.DS_Store
+*.swp
+*.swo
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary
+*.tmp
+.temp/
+
+# Secrets & Credentials
+*-secret*
+*-credentials*
+*.pem
+*.key

@@ -1,0 +1,37 @@
+{
+  "mainCalendar": "answer4154@gmail.com",
+  "childCalendars": {
+    "b8cca329113187787bdb3a92b282629cd876b96c6df554fe080480e2adc0085c@group.calendar.google.com": {
+      "colorId": "10",
+      "name": "放假日",
+      "description": "放假日曆"
+    },
+    "99e65d42d1d82579541b603b5d9ee7230e9c3b4198a61e557de6e72b8627f114@group.calendar.google.com": {
+      "colorId": "11",
+      "name": "子日曆2",
+      "description": ""
+    },
+    "27ae50e57228753b062a8bada3937433b7289f634f76b40cbfed30df943c66b3@group.calendar.google.com": {
+      "colorId": "4",
+      "name": "子日曆3",
+      "description": ""
+    },
+    "8c44030dc1d314fbb8c2c795fddb24eab5cad08517f18a7ae43259d1b3abfe0d@group.calendar.google.com": {
+      "colorId": "3",
+      "name": "子日曆4",
+      "description": ""
+    },
+    "b421d3a5c904f920639eb5a98b9a5f3d64148c26a2376b279e2e56d2c6f857c0@group.calendar.google.com": {
+      "colorId": "1",
+      "name": "子日曆5",
+      "description": ""
+    }
+  },
+  "webhookUrl": "https://n8n.startandkeep.com/webhook/calendar-sync",
+  "credentials": {
+    "googleCalendarOAuth2Api": {
+      "id": "tYCnPgCPqaU6NGeL",
+      "name": "Google Calendar account 2"
+    }
+  }
+}
