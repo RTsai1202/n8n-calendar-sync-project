@@ -28,3 +28,7 @@ yarn-error.log
 *-credentials*
 *.pem
 *.key
+
+# LINE Rich Menu images (can be regenerated)
+line-rich-menu*.png
+line-rich-menu*.jpg
