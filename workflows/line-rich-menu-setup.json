@@ -1,0 +1,195 @@
+{
+    "name": "LINE Rich Menu Setup",
+    "nodes": [
+        {
+            "parameters": {},
+            "id": "manual-trigger",
+            "name": "Manual Trigger",
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                0,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "values": {
+                    "string": [
+                        {
+                            "name": "accessToken",
+                            "value": "08rtpZLZGYFeIkgeFarEoQJ0vGxf0o5oNwtQZv/YAweBoLbWdwx6AY90BmpExgm2BU77wLq0xlKFk9HW4Lq/tmsmxCnvRrA3FdF+lWzt/Gf5+/fsxtFIgY8YO22dXb31UwHbncFqIjTr48LHBu1GqAdB04t89/1O/w1cDnyilFU="
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "config",
+            "name": "Config",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 1,
+            "position": [
+                220,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://api.line.me/v2/bot/richmenu",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "=Bearer {{ $('Config').item.json.accessToken }}"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"size\": {\n    \"width\": 2500,\n    \"height\": 843\n  },\n  \"selected\": true,\n  \"name\": \"行程查詢選單\",\n  \"chatBarText\": \"查詢選單\",\n  \"areas\": [\n    {\n      \"bounds\": {\n        \"x\": 0,\n        \"y\": 0,\n        \"width\": 625,\n        \"height\": 843\n      },\n      \"action\": {\n        \"type\": \"message\",\n        \"label\": \"今天\",\n        \"text\": \"今天\"\n      }\n    },\n    {\n      \"bounds\": {\n        \"x\": 625,\n        \"y\": 0,\n        \"width\": 625,\n        \"height\": 843\n      },\n      \"action\": {\n        \"type\": \"message\",\n        \"label\": \"明天\",\n        \"text\": \"明天\"\n      }\n    },\n    {\n      \"bounds\": {\n        \"x\": 1250,\n        \"y\": 0,\n        \"width\": 625,\n        \"height\": 843\n      },\n      \"action\": {\n        \"type\": \"message\",\n        \"label\": \"這個月\",\n        \"text\": \"={{ DateTime.now().setZone('Asia/Taipei').toFormat('M') }}月\"\n      }\n    },\n    {\n      \"bounds\": {\n        \"x\": 1875,\n        \"y\": 0,\n        \"width\": 625,\n        \"height\": 843\n      },\n      \"action\": {\n        \"type\": \"message\",\n        \"label\": \"下個月\",\n        \"text\": \"={{ DateTime.now().setZone('Asia/Taipei').plus({ months: 1 }).toFormat('M') }}月\"\n      }\n    }\n  ]\n}",
+                "options": {}
+            },
+            "id": "create-richmenu",
+            "name": "Create Rich Menu",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                440,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const richMenuId = $json.richMenuId;\nconst accessToken = $('Config').item.json.accessToken;\n\nreturn [{\n  json: {\n    richMenuId,\n    accessToken,\n    imageUrl: 'https://i.imgur.com/placeholder.png' // 暫時使用占位符，稍後需要上傳實際圖片\n  }\n}];"
+            },
+            "id": "extract-id",
+            "name": "Extract Rich Menu ID",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                660,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "=https://api-data.line.me/v2/bot/richmenu/{{ $json.richMenuId }}/content",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "=Bearer {{ $json.accessToken }}"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "image/png"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "contentType": "raw",
+                "rawContentType": "image/png",
+                "body": "={{ $binary.image }}",
+                "options": {}
+            },
+            "id": "upload-image",
+            "name": "Upload Rich Menu Image",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                880,
+                0
+            ],
+            "notes": "需要先準備 2500x843px 的圖片"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "=https://api.line.me/v2/bot/user/all/richmenu/{{ $('Extract Rich Menu ID').item.json.richMenuId }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "=Bearer {{ $('Config').item.json.accessToken }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "set-default-richmenu",
+            "name": "Set Default Rich Menu",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                1100,
+                0
+            ]
+        }
+    ],
+    "connections": {
+        "Manual Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "Create Rich Menu",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create Rich Menu": {
+            "main": [
+                [
+                    {
+                        "node": "Extract Rich Menu ID",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract Rich Menu ID": {
+            "main": [
+                [
+                    {
+                        "node": "Upload Rich Menu Image",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Upload Rich Menu Image": {
+            "main": [
+                [
+                    {
+                        "node": "Set Default Rich Menu",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}
