@@ -10,12 +10,8 @@ echo "🚀 開始部署 LINE Rich Menu..."
 # LINE Channel Access Token
 ACCESS_TOKEN="08rtpZLZGYFeIkgeFarEoQJ0vGxf0o5oNwtQZv/YAweBoLbWdwx6AY90BmpExgm2BU77wLq0xlKFk9HW4Lq/tmsmxCnvRrA3FdF+lWzt/Gf5+/fsxtFIgY8YO22dXb31UwHbncFqIjTr48LHBu1GqAdB04t89/1O/w1cDnyilFU="
 
-# 取得當前月份（用於動態按鈕）
-CURRENT_MONTH=$(date +%m | sed 's/^0//')
-NEXT_MONTH=$(date -v+1m +%m | sed 's/^0//')
-
-echo "📅 當前月份: ${CURRENT_MONTH}月"
-echo "📅 下個月份: ${NEXT_MONTH}月"
+# 使用固定關鍵字，避免每月更換後按鈕文字過期
+echo "📅 Rich Menu 將發送固定指令：這個月 / 下個月"
 
 # 步驟 1: 創建 Rich Menu
 echo ""
@@ -69,7 +65,7 @@ RICHMENU_RESPONSE=$(curl -s -X POST https://api.line.me/v2/bot/richmenu \
         "action": {
           "type": "message",
           "label": "這個月",
-          "text": "'"${CURRENT_MONTH}"'月"
+          "text": "這個月"
         }
       },
       {
@@ -82,7 +78,7 @@ RICHMENU_RESPONSE=$(curl -s -X POST https://api.line.me/v2/bot/richmenu \
         "action": {
           "type": "message",
           "label": "下個月",
-          "text": "'"${NEXT_MONTH}"'月"
+          "text": "下個月"
         }
       }
     ]
@@ -141,7 +137,8 @@ echo "🔗 步驟 4/4: 設定為所有用戶的預設選單..."
 
 DEFAULT_RESPONSE=$(curl -s -X POST \
   "https://api.line.me/v2/bot/user/all/richmenu/${RICHMENU_ID}" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}")
+  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+  -d '')
 
 if [ -n "$DEFAULT_RESPONSE" ] && echo "$DEFAULT_RESPONSE" | grep -q "error"; then
     echo "❌ 錯誤: 無法設定預設選單"

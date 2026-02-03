@@ -164,6 +164,14 @@ Save Sync Time
 3. **結構快照與完整備份用途不同**
    - `structure` 匯出適合架構治理與對照，不等於可完整還原的 full backup。
 
+4. **Rich Menu 動態月份不應寫死數字**
+   - 先前 Rich Menu 送出的文字是部署當下的月份（例如 `1月` / `2月`），跨月後會造成「這個月」實際查到上個月。
+   - 修正為固定送出 `這個月` / `下個月`，月份由 Bot 在執行當下計算。
+
+5. **LINE 設定預設 Rich Menu 需要 Content-Length**
+   - API `POST /v2/bot/user/all/richmenu/{richMenuId}` 若未帶 body，可能回 `HTTP 411 Length Required`。
+   - `curl` 端需加 `-d ''`，確保送出 `Content-Length: 0`。
+
 ### 驗收結果
 
 - `active=true`：4 條（符合預期）
