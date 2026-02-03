@@ -1,0 +1,289 @@
+{
+  "exportMode": "structure",
+  "id": "Cv4chzBsubStu01w",
+  "name": "Calendar Sync - Polling",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "schedule-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        0,
+        0
+      ],
+      "disabled": false
+    },
+    {
+      "id": "load-sync-time",
+      "name": "Load Last Sync Time",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        224,
+        0
+      ],
+      "disabled": false
+    },
+    {
+      "id": "get-events",
+      "name": "Get Updated Events",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        448,
+        0
+      ],
+      "disabled": false
+    },
+    {
+      "id": "process-events",
+      "name": "Process Events",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        672,
+        0
+      ],
+      "disabled": false
+    },
+    {
+      "id": "route-by-action",
+      "name": "Route by Action",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        880,
+        0
+      ],
+      "disabled": false
+    },
+    {
+      "id": "delete-mirror",
+      "name": "Delete Mirror Event",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1104,
+        -208
+      ],
+      "disabled": false
+    },
+    {
+      "id": "update-mirror",
+      "name": "Update Mirror Event",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1104,
+        0
+      ],
+      "disabled": false
+    },
+    {
+      "id": "update-child-meta",
+      "name": "Update Child Event Meta",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1984,
+        208
+      ],
+      "disabled": false
+    },
+    {
+      "id": "save-sync-time",
+      "name": "Save Sync Time",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        2208,
+        0
+      ],
+      "disabled": false
+    },
+    {
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        0,
+        208
+      ],
+      "disabled": false
+    },
+    {
+      "id": "check-mirror-exists",
+      "name": "Check Mirror Exists",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1104,
+        208
+      ],
+      "disabled": false
+    },
+    {
+      "id": "filter-new-only",
+      "name": "Filter New Only",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1328,
+        208
+      ],
+      "disabled": false
+    },
+    {
+      "id": "create-mirror-event",
+      "name": "Create Mirror Event",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1552,
+        208
+      ],
+      "disabled": false
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Load Last Sync Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Load Last Sync Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Last Sync Time": {
+      "main": [
+        [
+          {
+            "node": "Get Updated Events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Updated Events": {
+      "main": [
+        [
+          {
+            "node": "Process Events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Events": {
+      "main": [
+        [
+          {
+            "node": "Route by Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Action": {
+      "main": [
+        [
+          {
+            "node": "Delete Mirror Event",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Mirror Event",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check Mirror Exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete Mirror Event": {
+      "main": [
+        [
+          {
+            "node": "Save Sync Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Mirror Event": {
+      "main": [
+        [
+          {
+            "node": "Save Sync Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Child Event Meta": {
+      "main": [
+        [
+          {
+            "node": "Save Sync Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Mirror Exists": {
+      "main": [
+        [
+          {
+            "node": "Filter New Only",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter New Only": {
+      "main": [
+        [
+          {
+            "node": "Create Mirror Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Mirror Event": {
+      "main": [
+        [
+          {
+            "node": "Update Child Event Meta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeCount": 13,
+  "connectionCount": 12
+}

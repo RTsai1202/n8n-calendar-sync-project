@@ -1,0 +1,53 @@
+{
+  "catalogVersion": 1,
+  "generatedAt": "2026-02-03T15:50:15Z",
+  "source": "n8n-mcp structure export",
+  "items": [
+    {
+      "id": "Cv4chzBsubStu01w",
+      "name": "Calendar Sync - Polling",
+      "domain": "calendar-sync",
+      "lifecycle": "prod",
+      "active": true,
+      "sourceFile": "workflows/prod/calendar-sync/Cv4chzBsubStu01w__calendar-sync-polling.json",
+      "triggers": [
+        "scheduleTrigger",
+        "manualTrigger"
+      ]
+    },
+    {
+      "id": "c6RpvarTOfxYL5aEk84Mp",
+      "name": "Ghost 註冊 -> Kit 自動確認",
+      "domain": "membership-sync",
+      "lifecycle": "prod",
+      "active": true,
+      "sourceFile": "workflows/prod/membership-sync/c6RpvarTOfxYL5aEk84Mp__ghost-to-kit-webhook.json",
+      "triggers": [
+        "webhook"
+      ]
+    },
+    {
+      "id": "b9Qyu4KPLv1ZaeiT",
+      "name": "Kit → Ghost 會員同步 (輪詢)",
+      "domain": "membership-sync",
+      "lifecycle": "prod",
+      "active": true,
+      "sourceFile": "workflows/prod/membership-sync/b9Qyu4KPLv1ZaeiT__kit-to-ghost-polling.json",
+      "triggers": [
+        "scheduleTrigger"
+      ]
+    },
+    {
+      "id": "v2C7zLs5PLMiuZRy",
+      "name": "LINE 行程查詢 Bot (for Heptabase journal)",
+      "domain": "calendar-assistant",
+      "lifecycle": "prod",
+      "active": true,
+      "sourceFile": "workflows/prod/calendar-assistant/v2C7zLs5PLMiuZRy__line-calendar-assistant.json",
+      "triggers": [
+        "webhook",
+        "scheduleTrigger"
+      ]
+    }
+  ]
+}

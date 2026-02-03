@@ -1,0 +1,201 @@
+{
+  "exportMode": "structure",
+  "id": "v2C7zLs5PLMiuZRy",
+  "name": "LINE 行程查詢 Bot (for Heptabase journal)",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "e76cac5e-b194-4529-96d2-64ac808a3877",
+      "name": "Line Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        -16,
+        336
+      ],
+      "disabled": false
+    },
+    {
+      "id": "4c1897e8-041e-4125-8e91-0c667849f06f",
+      "name": "Config",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        208,
+        336
+      ],
+      "disabled": false
+    },
+    {
+      "id": "839291ec-702d-42d2-8d47-899fdf7b1ddc",
+      "name": "Format Message",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        864,
+        336
+      ],
+      "disabled": false
+    },
+    {
+      "id": "3015e5f7-1fd1-427e-9699-a73269a16af8",
+      "name": "Reply to Line",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1088,
+        336
+      ],
+      "disabled": false
+    },
+    {
+      "id": "f85b0a8c-ba39-416d-96c3-1cce4650c7b4",
+      "name": "Parse Command1",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        432,
+        336
+      ],
+      "disabled": false
+    },
+    {
+      "id": "19a5f22d-44cf-44b1-8d83-759151422050",
+      "name": "Get Events1",
+      "type": "n8n-nodes-base.googleCalendar",
+      "position": [
+        656,
+        336
+      ],
+      "disabled": false
+    },
+    {
+      "id": "schedule-trigger-daily",
+      "name": "Schedule Trigger (6AM)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        0,
+        112
+      ],
+      "disabled": false
+    },
+    {
+      "id": "get-today-events-daily",
+      "name": "Get Today Events",
+      "type": "n8n-nodes-base.googleCalendar",
+      "position": [
+        224,
+        112
+      ],
+      "disabled": false
+    },
+    {
+      "id": "format-daily-message",
+      "name": "Format Daily Message",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        448,
+        112
+      ],
+      "disabled": false
+    },
+    {
+      "id": "push-to-line",
+      "name": "Push to LINE",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        672,
+        112
+      ],
+      "disabled": false
+    }
+  ],
+  "connections": {
+    "Line Webhook": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Parse Command1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Message": {
+      "main": [
+        [
+          {
+            "node": "Reply to Line",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Command1": {
+      "main": [
+        [
+          {
+            "node": "Get Events1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Events1": {
+      "main": [
+        [
+          {
+            "node": "Format Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger (6AM)": {
+      "main": [
+        [
+          {
+            "node": "Get Today Events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Today Events": {
+      "main": [
+        [
+          {
+            "node": "Format Daily Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Daily Message": {
+      "main": [
+        [
+          {
+            "node": "Push to LINE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeCount": 10,
+  "connectionCount": 8
+}

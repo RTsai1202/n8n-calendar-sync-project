@@ -1,0 +1,112 @@
+{
+  "exportMode": "structure",
+  "id": "b9Qyu4KPLv1ZaeiT",
+  "name": "Kit → Ghost 會員同步 (輪詢)",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "schedule-1",
+      "name": "Every 10 Seconds",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        0,
+        0
+      ],
+      "disabled": false
+    },
+    {
+      "id": "http-kit",
+      "name": "Get All Kit Subscribers",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        250,
+        0
+      ],
+      "disabled": false
+    },
+    {
+      "id": "code-filter",
+      "name": "Filter Recent",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        500,
+        0
+      ],
+      "disabled": false
+    },
+    {
+      "id": "code-jwt",
+      "name": "Generate Ghost JWT",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        750,
+        0
+      ],
+      "disabled": false
+    },
+    {
+      "id": "http-ghost",
+      "name": "Create Ghost Member",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1000,
+        0
+      ],
+      "disabled": false
+    }
+  ],
+  "connections": {
+    "Create Ghost Member": {
+      "main": [
+        []
+      ]
+    },
+    "Every 10 Seconds": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Get All Kit Subscribers",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Filter Recent": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Generate Ghost JWT",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Generate Ghost JWT": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Create Ghost Member",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Get All Kit Subscribers": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Filter Recent",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "nodeCount": 5,
+  "connectionCount": 5
+}

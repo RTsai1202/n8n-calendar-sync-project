@@ -1,0 +1,103 @@
+{
+  "exportMode": "structure",
+  "id": "c6RpvarTOfxYL5aEk84Mp",
+  "name": "Ghost 註冊 -> Kit 自動確認",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "e602a543-504e-4219-8253-ac533778d6b9",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        0,
+        0
+      ],
+      "disabled": false
+    },
+    {
+      "id": "check-kit-subscriber",
+      "name": "Check Kit Subscriber",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        250,
+        0
+      ],
+      "disabled": false
+    },
+    {
+      "id": "if-not-exists",
+      "name": "If Not Exists in Kit",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        500,
+        0
+      ],
+      "disabled": false
+    },
+    {
+      "id": "b5eab78e-adbf-47fe-a812-5768221b9427",
+      "name": "Add a subscriber",
+      "type": "n8n-nodes-base.convertKit",
+      "position": [
+        750,
+        -100
+      ],
+      "disabled": false
+    },
+    {
+      "id": "no-op-skip",
+      "name": "Skip (Already Exists)",
+      "type": "n8n-nodes-base.noOp",
+      "position": [
+        750,
+        100
+      ],
+      "disabled": false
+    }
+  ],
+  "connections": {
+    "Check Kit Subscriber": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "If Not Exists in Kit",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "If Not Exists in Kit": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Add a subscriber",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Skip (Already Exists)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Check Kit Subscriber",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "nodeCount": 5,
+  "connectionCount": 3
+}

@@ -125,3 +125,49 @@ Save Sync Time
 ---
 
 *修復完成時間：2026-01-26 07:37 (Asia/Taipei)*
+
+---
+
+## 2026-02-03 重整：Workflow 架構清理 + LINE 排程時區修正
+
+### 今天完成的修正
+
+1. **線上工作流清理**
+   - 依「只留在用流程」原則，保留 4 條 active workflow：
+     - `Cv4chzBsubStu01w`（Calendar Sync - Polling）
+     - `c6RpvarTOfxYL5aEk84Mp`（Ghost 註冊 -> Kit 自動確認）
+     - `b9Qyu4KPLv1ZaeiT`（Kit → Ghost 會員同步）
+     - `v2C7zLs5PLMiuZRy`（LINE 行程查詢 Bot）
+   - 永久刪除 14 條 inactive/archived 舊流程。
+
+2. **Repo 架構重整**
+   - 將 workflow JSON 重新分層到：
+     - `workflows/prod/calendar-sync/`
+     - `workflows/prod/membership-sync/`
+     - `workflows/prod/calendar-assistant/`
+   - 新增 `workflows/manifests/workflows.catalog.json` 作為 workflow 索引。
+   - 新增 `docs/workflow-architecture.md` 供維運與責任邊界查閱。
+
+3. **LINE 每日推送時間修正**
+   - 問題：預期 06:00 推送，實際在 19:00 觸發。
+   - 根因：workflow 未明確設定時區，Cron `0 6 * * *` 被以 instance 預設時區解讀。
+   - 修正：將 workflow `v2C7zLs5PLMiuZRy` settings 設為 `timezone: Asia/Taipei`。
+
+### 值得紀錄的問題與經驗
+
+1. **Cron 正確不代表排程正確**
+   - `0 6 * * *` 必須搭配 workflow timezone，否則在跨時區部署會偏移。
+
+2. **清理策略要先用白名單**
+   - 先定義「保留白名單」，再刪除其餘流程，可有效降低誤刪風險。
+
+3. **結構快照與完整備份用途不同**
+   - `structure` 匯出適合架構治理與對照，不等於可完整還原的 full backup。
+
+### 驗收結果
+
+- `active=true`：4 條（符合預期）
+- `active=false`：0 條（符合預期）
+- 4 條保留流程皆有近期成功執行紀錄。
+
+*修復完成時間：2026-02-03 (Asia/Taipei)*
